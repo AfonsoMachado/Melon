@@ -18,67 +18,73 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'org.jmailen.kotlinter'
+plugins {
+    id("com.android.library")
+    kotlin("android")
+    kotlin("android.extensions")
+    kotlin("kapt")
+    id("org.jmailen.kotlinter")
+}
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.1"
-
+    compileSdkVersion(Versions.Android.COMPILE_SDK)
+    buildToolsVersion(Versions.Android.BUILD_TOOLS)
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion(Versions.Android.MIN_SDK)
+        targetSdkVersion(Versions.Android.TARGET_SDK)
+        versionCode = 1
+        versionName = "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles 'consumer-rules.pro'
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        getByName("release") {
+            isMinifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
 
     buildFeatures {
-        dataBinding true
+        dataBinding = true
     }
 
     compileOptions {
-        targetCompatibility JavaVersion.VERSION_1_8
-        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        val options = this as org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
+        options.jvmTarget = "1.8"
     }
 
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    api(platform(project(":depconstraints")))
+    kapt(platform(project(":depconstraints")))
 
-    // TODO Remove this dep
-    implementation "com.github.forcetower:juice:$sagres"
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+
+
+    implementation(Libs.KOTLIN_STDLIB)
+    implementation(Libs.KOTLIN_REFLECT)
+
+    implementation(Libs.JUICE)
 
     // Android X
-    implementation "androidx.core:core-ktx:$ktx"
-    implementation "androidx.annotation:annotation:$annotation"
-    implementation "androidx.appcompat:appcompat:$app_compat"
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swipe_refresh"
-    implementation "androidx.constraintlayout:constraintlayout:$constraint_layout"
-    implementation "com.google.android.material:material:$google_material"
-    implementation "androidx.palette:palette:$pallete"
-    implementation "androidx.browser:browser:$browser"
-    implementation "androidx.preference:preference:$preference"
+    implementation(Libs.CORE_KTX)
+    implementation(Libs.ANNOTATION)
+    implementation(Libs.APPCOMPAT)
+    implementation(Libs.SWIPE_REFRESH)
+    implementation(Libs.CONSTRAINT_LAYOUT)
+    implementation(Libs.MATERIAL)
+    implementation(Libs.PALETTE)
+    implementation(Libs.BROWSER)
+    implementation(Libs.PREFERENCES)
     implementation "com.google.android:flexbox:$flexbox"
     implementation "androidx.fragment:fragment:$fragment"
     implementation "androidx.fragment:fragment-ktx:$fragment"
